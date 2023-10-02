@@ -9,7 +9,6 @@ https://docs.circuitpython.org/en/8.2.x/README.html
 https://learn.adafruit.com/adafruit-audio-bff/circuitpython
 https://learn.adafruit.com/circuitpython-display-support-using-displayio
 https://bigsoundbank.com/categories.html
-https://learn.adafruit.com/microcontroller-compatible-audio-file-conversion
 '''
 
 import audiocore
@@ -128,7 +127,7 @@ def play_audio(file_name):
                 pass
     except:
         print("failed", file_name)
-        
+        pass
 
 #file_name = "chime_big_ben_2.wav"
 file_name = "/sd/chime_big_ben_2.wav"
@@ -137,15 +136,11 @@ file_name = "/sd/chime_big_ben_2.wav"
 
 # aamuja = 40
 aamuja_offset = 0
-claer_offset_time  = 0
-clear_offset_flag  = False
+
 iter_cnt = 1
 SSD_UPDATE_INTERVAL = 0.2
-CLEAR_OFFSET_DELAY   = 10.0
 
-clear_offset_time  = time.monotonic() + CLEAR_OFFSET_DELAY
 next_ssd_time = time.monotonic() + SSD_UPDATE_INTERVAL
-
 while 1:
     t = rtc.get_time()
     aamuja = aamu.how_many(t.tm_mon,t.tm_mday)
@@ -157,17 +152,20 @@ while 1:
         print(chr(key[0]))
         if chr(key[0]) == 'H':
             aamuja_offset = aamuja_offset - 10
-            clear_offset_flag = True
-            clear_offset_time  = time.monotonic() + CLEAR_OFFSET_DELAY
+            file_name = "/sd/sanna_2b.wav"
+            play_audio(file_name)
         elif chr(key[0]) == 'D':
             aamuja_offset = aamuja_offset + 10
-            play_audio("/sd/sanna_ojojb.wav")
-            clear_offset_flag = True
-            clear_offset_time  = time.monotonic() + CLEAR_OFFSET_DELAY
+            file_name = "/sd/sanna_ojojb.wav"
+            play_audio(file_name)
         elif chr(key[0]) == 'A':
-            play_audio("/sd/chime_big_ben_2.wav")
+            file_name = "/sd/chime_big_ben_2b.wav"
+            play_audio(file_name)
 
+        elif chr(key[0]) == 'B':
+            play_audio('/sd/alarm_beep.vaw')
 
+            
     a = aamuja + aamuja_offset
     if a < 0:
         a = 0
@@ -178,13 +176,8 @@ while 1:
     if time.monotonic() > next_ssd_time:
         next_ssd_time = time.monotonic() + SSD_UPDATE_INTERVAL
         ssd_aamuja(a,t)
-    if clear_offset_flag:
-        if time.monotonic() > clear_offset_time:
-            clear_offset_flag = False
-            play_audio("/sd/sanna_2b.wav")
-            aamuja_offset = 0
-            
-    
+
+
 '''
 file_name = "/sd/chime_big_ben_2.wav"
 '''
